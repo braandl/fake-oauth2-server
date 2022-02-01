@@ -125,10 +125,10 @@ function validateAccessTokenRequest(req, res) {
     success = false;
     msg = errorMsg("client_secret", EXPECTED_CLIENT_SECRET, req.body.client_secret);
   }
-  if (req.session.redirect_uri !== req.body.redirect_uri) {
+  /*if (req.session.redirect_uri !== req.body.redirect_uri) {
     success = false;
     msg = errorMsg("redirect_uri", req.session.redirect_uri, req.body.redirect_uri);
-  }
+  }*/
   if (!success) {
     const params = {};
     if (msg) {
@@ -235,7 +235,7 @@ app.post(ACCESS_TOKEN_REQUEST_PATH, (req, res) => {
     const token = code2token[code];
     if (token !== undefined) {
       console.log("access token response body: ", token);
-      res.send(token);
+      res.json(token);
     }
   }
   res.end();
@@ -250,7 +250,7 @@ app.get(USERINFO_REQUEST_URL, (req, res) => {
       res.send("this token is already expired");
     }
     else{
-      res.send(token_info);
+      res.json(token_info);
     }
   } else {
     res.status(404);
@@ -266,7 +266,7 @@ app.get(TOKENINFO_REQUEST_URL, (req, res) => {
   const token_info = id_token2personData[req.query.id_token];
   if (token_info !== undefined) {
     res.status(200);
-    res.send(token_info);
+    res.json(token_info);
   } else {
     res.status(404);
     res.send("token not found by id_token " + req.query.id_token);
